@@ -27,12 +27,10 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         String authorizationHeaders = request.getHeader(environment.getProperty("authorization.token.header.name"));
-
         if (authorizationHeaders == null || !authorizationHeaders.startsWith(environment.getProperty("authorization.token.header.prefix"))) {
             chain.doFilter(request, response);
             return;
         }
-
         UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(request);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         chain.doFilter(request, response);
@@ -42,18 +40,14 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
         String authorizationHeaders = request.getHeader(environment.getProperty("authorization.token.header.name"));
         if (authorizationHeaders == null) { return null; }
-
         String token = authorizationHeaders.replace(environment.getProperty("authorization.token.header.prefix") + " ","");
-
         String userId = "";
-
         try {
             userId = Jwts.parser()
                     .setSigningKey(environment.getProperty("token.secret"))
                     .parseClaimsJws(token)
                     .getBody()
                     .getSubject();
-
         } catch (Exception e) {
             new RuntimeException(e);
         }
