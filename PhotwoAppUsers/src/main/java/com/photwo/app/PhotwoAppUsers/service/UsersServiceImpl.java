@@ -23,13 +23,14 @@ public class UsersServiceImpl implements UsersService {
 
     UserRepository userRepository;
     BCryptPasswordEncoder bCryptPasswordEncoder;
-    RestTemplate restTemplate;
+    // RestTemplate restTemplate;
+    AlbumServiceClient albumServiceClient;
 
     @Autowired
-    public UsersServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RestTemplate restTemplate) {
+    public UsersServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AlbumServiceClient albumServiceClient) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRepository = userRepository;
-        this.restTemplate = restTemplate;
+        this.albumServiceClient = albumServiceClient;
     }
 
     public void createUser(User user) {
@@ -64,10 +65,7 @@ public class UsersServiceImpl implements UsersService {
         userResponseModel.setLastName(user.getLastName());
         userResponseModel.setUserId(user.getUserId());
 
-        String albumsUrl = String.format("http://ALBUMS-WS/users/%s/albums", userId);
-        ResponseEntity<List<Album>> albumsResponseModel = restTemplate.exchange(albumsUrl,
-                HttpMethod.GET, null, new ParameterizedTypeReference<List<Album>>() {});
-        userResponseModel.setAlbums(albumsResponseModel.getBody());
+        userResponseModel.setAlbums(albumServiceClient.getAlbums(userId));
         return userResponseModel;
     }
 }
