@@ -1,6 +1,7 @@
 package com.photwo.app.PhotwoAppUsers.controller;
 
 import com.photwo.app.PhotwoAppUsers.model.User;
+import com.photwo.app.PhotwoAppUsers.model.UserResponseModel;
 import com.photwo.app.PhotwoAppUsers.service.UsersService;
 import com.photwo.app.PhotwoAppUsers.service.UsersServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,10 @@ public class UsersController {
     @GetMapping
     public Iterable<User> findAll() {
         return usersServiceImpl.findAll();
+    }
+
+    @GetMapping(path = "/{userId}")
+    public ResponseEntity<UserResponseModel> getUserDetails(@PathVariable String userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(usersServiceImpl.getUserDetails(userId));
     }
 }
