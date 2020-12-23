@@ -29,16 +29,14 @@ public class UsersController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         user.setUserId(UUID.randomUUID().toString());
         usersServiceImpl.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @GetMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @GetMapping
     public Iterable<User> findAll() {
         return usersServiceImpl.findAll();
     }
