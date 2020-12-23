@@ -25,7 +25,7 @@ public class UsersController {
 
     @GetMapping(path = "/status")
     public ResponseEntity<String> status() {
-        String response = "Working on port: " + env.getProperty("local.server.port");
+        String response = "Working on port: " + env.getProperty("local.server.port") + " with token: " + env.getProperty("token.secret");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
