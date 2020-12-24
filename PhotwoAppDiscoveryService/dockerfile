@@ -1,0 +1,4 @@
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+COPY target/PhotwoAppDiscoveryService-0.0.1-SNAPSHOT.jar PhotwoAppDiscoveryService.jar
+ENTRYPOINT ["java","-jar","PhotwoAppDiscoveryService"]
