@@ -1,6 +1,7 @@
 package com.photwo.app.PhotwoAppUsers.controller;
 
 import com.photwo.app.PhotwoAppUsers.model.User;
+import com.photwo.app.PhotwoAppUsers.model.UserResponseModel;
 import com.photwo.app.PhotwoAppUsers.service.UsersService;
 import com.photwo.app.PhotwoAppUsers.service.UsersServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class UsersController {
 
     @GetMapping(path = "/status")
     public ResponseEntity<String> status() {
-        String response = "Working on port: " + env.getProperty("local.server.port");
+        String response = "Working on port: " + env.getProperty("local.server.port") + " with token: " + env.getProperty("token.secret");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -39,5 +40,10 @@ public class UsersController {
     @GetMapping
     public Iterable<User> findAll() {
         return usersServiceImpl.findAll();
+    }
+
+    @GetMapping(path = "/{userId}")
+    public ResponseEntity<UserResponseModel> getUserDetails(@PathVariable String userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(usersServiceImpl.getUserDetails(userId));
     }
 }
