@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.logging.Logger;
+
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
@@ -27,4 +29,5 @@ public class PhotwoAppUsersApplication {
 	@Bean
 	@LoadBalanced
 	public RestTemplate getRestTemplate() { return new RestTemplate(); }
+
 }

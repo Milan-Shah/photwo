@@ -4,6 +4,9 @@ import com.photwo.app.PhotwoAppUsers.model.Album;
 import com.photwo.app.PhotwoAppUsers.model.User;
 import com.photwo.app.PhotwoAppUsers.model.UserResponseModel;
 import com.photwo.app.PhotwoAppUsers.repository.UserRepository;
+import feign.FeignException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -25,6 +28,8 @@ public class UsersServiceImpl implements UsersService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
     // RestTemplate restTemplate;
     AlbumServiceClient albumServiceClient;
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public UsersServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AlbumServiceClient albumServiceClient) {
@@ -65,7 +70,12 @@ public class UsersServiceImpl implements UsersService {
         userResponseModel.setLastName(user.getLastName());
         userResponseModel.setUserId(user.getUserId());
 
-        userResponseModel.setAlbums(albumServiceClient.getAlbums(userId));
+        try {
+            userResponseModel.setAlbums(albumServiceClient.getAlbums(userId));
+        } catch (FeignException.FeignClientException e) {
+            logger.error(e.getLocalizedMessage());
+        }
+
         return userResponseModel;
     }
 }
